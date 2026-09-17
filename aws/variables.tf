@@ -31,6 +31,17 @@ variable "aws_region" {
   }
 }
 
+variable "region" {
+  description = "Backward-compatible region alias supplied by the runner."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.region == null || can(regex("^[a-z]{2}(-gov|-iso|-isob)?-[a-z]+-[0-9]+$", var.region))
+    error_message = "region must be null or a valid AWS region such as us-east-1."
+  }
+}
+
 variable "availability_zone" {
   description = "Availability zone for a newly created subnet."
   type        = string
