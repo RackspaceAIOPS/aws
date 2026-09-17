@@ -23,7 +23,7 @@ variable "instance_type" {
 variable "aws_region" {
   description = "AWS region in which to provision the instance."
   type        = string
-  default     = "us-east-1"
+  default     = "us-west-2"
 
   validation {
     condition     = can(regex("^[a-z]{2}(-gov|-iso|-isob)?-[a-z]+-[0-9]+$", var.aws_region))
