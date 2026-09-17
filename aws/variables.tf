@@ -100,7 +100,7 @@ variable "subnet_mode" {
 variable "subnet_selection" {
   description = "Backward-compatible alias for the subnet selection provided by the runner."
   type        = string
-  default     = null
+  default     = ""
 
   validation {
     condition     = var.subnet_selection == null ? true : contains(["create_new", "existing"], var.subnet_selection)
