@@ -1,11 +1,16 @@
+locals {
+  effective_vpc_mode    = var.vpc_selection == null || trimspace(var.vpc_selection) == "" ? var.vpc_mode : var.vpc_selection
+  effective_subnet_mode = var.subnet_selection == null || trimspace(var.subnet_selection) == "" ? var.subnet_mode : var.subnet_selection
+}
+
 data "aws_vpc" "existing" {
-  count = var.vpc_mode == "existing" ? 1 : 0
+  count = local.effective_vpc_mode == "existing" ? 1 : 0
 
   id = var.vpc_id
 }
 
 resource "aws_vpc" "new" {
-  count = var.vpc_mode == "create_new" ? 1 : 0
+  count = local.effective_vpc_mode == "create_new" ? 1 : 0
 
   cidr_block           = var.new_vpc_cidr
   enable_dns_hostnames = true
@@ -17,17 +22,17 @@ resource "aws_vpc" "new" {
 }
 
 locals {
-  vpc_id = var.vpc_mode == "create_new" ? aws_vpc.new[0].id : data.aws_vpc.existing[0].id
+  vpc_id = local.effective_vpc_mode == "create_new" ? aws_vpc.new[0].id : data.aws_vpc.existing[0].id
 }
 
 data "aws_subnet" "existing" {
-  count = var.subnet_mode == "existing" ? 1 : 0
+  count = local.effective_subnet_mode == "existing" ? 1 : 0
 
   id = var.subnet_id
 }
 
 resource "aws_subnet" "new" {
-  count = var.subnet_mode == "create_new" ? 1 : 0
+  count = local.effective_subnet_mode == "create_new" ? 1 : 0
 
   vpc_id            = local.vpc_id
   cidr_block        = var.new_subnet_cidr
@@ -40,11 +45,11 @@ resource "aws_subnet" "new" {
 }
 
 locals {
-  subnet_id = var.subnet_mode == "create_new" ? aws_subnet.new[0].id : data.aws_subnet.existing[0].id
+  subnet_id = local.effective_subnet_mode == "create_new" ? aws_subnet.new[0].id : data.aws_subnet.existing[0].id
 }
 
 resource "aws_internet_gateway" "new" {
-  count = var.vpc_mode == "create_new" ? 1 : 0
+  count = local.effective_vpc_mode == "create_new" ? 1 : 0
 
   vpc_id = local.vpc_id
 
@@ -54,7 +59,7 @@ resource "aws_internet_gateway" "new" {
 }
 
 resource "aws_route_table" "public" {
-  count = var.vpc_mode == "create_new" ? 1 : 0
+  count = local.effective_vpc_mode == "create_new" ? 1 : 0
 
   vpc_id = local.vpc_id
 
@@ -69,7 +74,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  count = var.vpc_mode == "create_new" && var.subnet_mode == "create_new" ? 1 : 0
+  count = local.effective_vpc_mode == "create_new" && local.effective_subnet_mode == "create_new" ? 1 : 0
 
   route_table_id = aws_route_table.public[0].id
   subnet_id     = local.subnet_id

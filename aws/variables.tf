@@ -53,6 +53,17 @@ variable "vpc_mode" {
   }
 }
 
+variable "vpc_selection" {
+  description = "Backward-compatible alias for the VPC selection provided by the runner."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.vpc_selection == null ? true : contains(["create_new", "existing"], var.vpc_selection)
+    error_message = "vpc_selection must be either create_new or existing."
+  }
+}
+
 variable "new_vpc_cidr" {
   description = "CIDR block for a newly created VPC."
   type        = string
@@ -83,6 +94,17 @@ variable "subnet_mode" {
   validation {
     condition     = contains(["create_new", "existing"], var.subnet_mode)
     error_message = "subnet_mode must be either create_new or existing."
+  }
+}
+
+variable "subnet_selection" {
+  description = "Backward-compatible alias for the subnet selection provided by the runner."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.subnet_selection == null ? true : contains(["create_new", "existing"], var.subnet_selection)
+    error_message = "subnet_selection must be either create_new or existing."
   }
 }
 
