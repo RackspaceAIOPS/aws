@@ -47,14 +47,6 @@ variable "availability_zone" {
   type        = string
   default     = "us-west-2a"
 
-  validation {
-    condition     = can(regex("^[a-z]{2}(-gov|-iso|-isob)?-[a-z]+-[0-9]+[a-z]$", var.availability_zone))
-<<<<<<< HEAD
-    error_message = "availability_zone must be a valid availability zone such as us-west-2a. Depending on the VPC region"
-=======
-    error_message = "availability_zone must be a valid availability zone such as us-west-2a."
->>>>>>> 478d19b (chainge the default values of regions)
-  }
 }
 
 variable "vpc_mode" {
