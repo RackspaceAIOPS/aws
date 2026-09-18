@@ -34,11 +34,11 @@ variable "aws_region" {
 variable "availability_zone" {
   description = "Availability zone for a newly created subnet."
   type        = string
-  default     = "us-east-1a"
+  default     = "us-west-2a"
 
   validation {
     condition     = can(regex("^[a-z]{2}(-gov|-iso|-isob)?-[a-z]+-[0-9]+[a-z]$", var.availability_zone))
-    error_message = "availability_zone must be a valid availability zone such as us-east-1a."
+    error_message = "availability_zone must be a valid availability zone such as us-west-2a. Depending on the VPC region"
   }
 }
 
