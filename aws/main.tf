@@ -1,6 +1,6 @@
 locals {
-  effective_vpc_mode    = var.vpc_selection == null || trimspace(var.vpc_selection) == "" ? var.vpc_mode : var.vpc_selection
-  effective_subnet_mode = var.subnet_selection == null || trimspace(var.subnet_selection) == "" ? var.subnet_mode : var.subnet_selection
+  effective_vpc_mode    = try(trimspace(var.vpc_selection), "") != "" ? try(trimspace(var.vpc_selection), "") : var.vpc_mode
+  effective_subnet_mode = try(trimspace(var.subnet_selection), "") != "" ? try(trimspace(var.subnet_selection), "") : var.subnet_mode
 }
 
 data "aws_vpc" "existing" {
