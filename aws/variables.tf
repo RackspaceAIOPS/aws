@@ -109,10 +109,7 @@ variable "subnet_selection" {
   type        = string
   default     = ""
 
-  validation {
-    condition     = var.subnet_selection == null ? true : contains(["create_new", "existing"], var.subnet_selection)
-    error_message = "subnet_selection must be either create_new or existing."
-  }
+
 }
 
 variable "new_subnet_cidr" {
